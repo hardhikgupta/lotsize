@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lot Size Calculator - Hardhik Gupta</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 320px;
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    /* ✅ Watermark */
+    .watermark {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      text-align: right;
+      font-size: 1.25em;
+      color: gray;
+      opacity: 0.7;
+      line-height: 1.4;
+    }
+    .watermark strong {
+      font-size: 20px;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Lot Size Calculator</h2>
+
+    <label for="pair">Trading Pair</label>
+    <select id="pair">
+      <option value="xau">XAU (Gold)</option>
+      <option value="currency">Currency (EURUSD, GBPUSD etc.)</option>
+      <option value="other">Other (Indices, Crypto etc.)</option>
+    </select>
+
+    <label for="risk">Risk Percentage</label>
+    <input type="number" id="risk" placeholder="e.g. 2">
+    
+    <label for="balance">Balance</label>
+    <input type="number" id="balance" placeholder="e.g. 1000">
+    
+    <label for="stopLoss">Stop Loss (points)</label>
+    <input type="number" id="stopLoss" placeholder="e.g. 50">
+    
+    <button onclick="calculateLotSize()">Calculate</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <!-- ✅ Watermark -->
+  <div class="watermark">
+    <strong>© HARDHIK GUPTA</strong><br>
+  <span style="color:black;">telegram username @hardhikgupta</span>
+  </div>
+
+  <script>
+    function calculateLotSize() {
+      let pair = document.getElementById("pair").value;
+      let risk = parseFloat(document.getElementById("risk").value);
+      let balance = parseFloat(document.getElementById("balance").value);
+      let stopLoss = parseFloat(document.getElementById("stopLoss").value);
+
+      if (isNaN(risk) || isNaN(balance) || isNaN(stopLoss) || stopLoss === 0) {
+        document.getElementById("result").innerHTML = "⚠️ Please enter valid numbers!";
+        return;
+      }
+
+      let rawLot = (risk * balance) / (stopLoss * 100);
+      let lotSize;
+
+      if (pair === "xau") {
+        lotSize = rawLot / 100;
+      } else if (pair === "currency") {
+        lotSize = rawLot / 100000;
+      } else {
+        lotSize = rawLot / 1;
+      }
+
+      document.getElementById("result").innerHTML = "📊 Lot Size: " + lotSize.toFixed(2);
+    }
+  </script>
+</body>
+</html>
